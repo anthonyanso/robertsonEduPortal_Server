@@ -15,6 +15,7 @@
     "@vercel/blob": "^1.1.1",
     "bcryptjs": "^3.0.2",
     "connect-pg-simple": "^10.0.0",
+    "cors": "^2.8.5",
     "cross-env": "^10.0.0",
     "dotenv": "^17.2.1",
     "express": "^4.21.2",

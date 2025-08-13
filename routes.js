@@ -2,7 +2,6 @@
 const { createServer } = require("http");
 const { storage } = require("./storage");
 const { setupSimpleAdminAuth } = require("./simpleAdminRoutes");
-// Removed all imports from ../shared/schema. Use storage.js and db.js for all database and schema operations.
 const { z } = require("zod");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -12,16 +11,12 @@ const { query, pool } = require("./db");
 const fileUpload = require("express-fileupload");
 const { put } = require("@vercel/blob");
 const path = require("path");
-// Removed students import from ../shared/schema. Use storage.js and db.js for all database operations.
-// Removed drizzle-orm eq import
 const multer = require("multer");
 const fs = require("fs");
 let nanoid;
 (async () => {
   ({ nanoid } = await import("nanoid"));
 })();
-// Remove usage of app outside the registerRoutes function
-// Function to calculate subject positions for each subject across all students
 async function calculateSubjectPositions(className, session, term) {
   try {
     // Get all results for the same class, session, and term

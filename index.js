@@ -1,7 +1,6 @@
-
-
 require('dotenv/config');
 const express = require('express');
+const cors = require('cors');
 const { registerRoutes } = require('./routes');
 let setupVite, serveStatic, log;
 if (process.env.NODE_ENV === 'development') {
@@ -13,6 +12,14 @@ if (process.env.NODE_ENV === 'development') {
 
 
 const app = express();
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'https://robertsoneduportal.vercel.app',
+    'https://robertsoneduportalserver.vercel.app'
+  ],
+  credentials: true
+}));
 app.use(express.json({ limit: '50mb' })); // Increased limit for passport photos
 app.use(express.urlencoded({ extended: false, limit: '50mb' }));
 
