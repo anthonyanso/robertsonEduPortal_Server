@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const session = require("express-session");
 const JWT_SECRET = process.env.SESSION_SECRET || "fallback-secret-for-dev";
-export function setupSimpleAdminAuth(app) {
+function setupSimpleAdminAuth(app) {
     // Use memory store for sessions (simpler approach)
     app.use(session({
         secret: JWT_SECRET,
@@ -170,5 +170,8 @@ export function setupSimpleAdminAuth(app) {
             res.status(401).json({ message: "Authentication failed" });
         }
     });
+
     return requireAdminAuth;
 }
+
+module.exports = { setupSimpleAdminAuth };

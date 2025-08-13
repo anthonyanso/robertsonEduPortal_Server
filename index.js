@@ -65,5 +65,13 @@ if (process.env.NODE_ENV === 'development' && setupVite) {
   serveStatic(app);
 }
 
+// Start server locally and log message
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log('RobertsonEduPortal backend is running!');
+  });
+}
+
 // Export a handler for Vercel serverless deployment
 module.exports = (req, res) => app(req, res);

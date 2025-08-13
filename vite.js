@@ -5,7 +5,14 @@ let viteConfig;
 if (process.env.NODE_ENV === "development") {
     viteConfig = require("../vite.config");
 }
-const { nanoid } = require("nanoid");
+let nanoid;
+
+async function getNanoid() {
+    if (!nanoid) {
+        nanoid = (await import('nanoid')).nanoid;
+    }
+    return nanoid;
+}
 
 let viteLogger;
 
@@ -29,7 +36,8 @@ async function setupVite(app, server) {
             const clientTemplate = path.resolve(__dirname, "..", "src", "index.html");
             // always reload the index.html file from disk incase it changes
             let template = await fs.promises.readFile(clientTemplate, "utf-8");
-            template = template.replace(`src="/src/main.tsx"`, `src="/src/main.tsx?v=${nanoid()}"`);
+            const nanoidFn = await getNanoid();
+            template = template.replace(`src="/src/main.tsx"`, `src="/src/main.tsx?v=${nanoidFn()}"`);
             const page = await vite.transformIndexHtml(url, template);
             res.status(200).set({ "Content-Type": "text/html" }).end(page);
         }
@@ -53,7 +61,8 @@ function log(message, source = "express") {
 function serveStatic(app) {
     const distPath = path.resolve(__dirname, "public");
     if (!fs.existsSync(distPath)) {
-        throw new Error(`Could not find the build directory: ${distPath}, make sure to build the client first`);
+        console.warn(`Warning: Skipping static serving. Could not find the build directory: ${distPath}`);
+        return;
     }
     app.use(express.static(distPath));
     // fall through to index.html if the file doesn't exist
