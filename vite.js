@@ -1,7 +1,10 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const viteConfig = require("../vite.config");
+let viteConfig;
+if (process.env.NODE_ENV === "development") {
+    viteConfig = require("../vite.config");
+}
 const { nanoid } = require("nanoid");
 
 let viteLogger;
