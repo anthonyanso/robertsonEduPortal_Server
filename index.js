@@ -1,8 +1,15 @@
 
+
 require('dotenv/config');
 const express = require('express');
 const { registerRoutes } = require('./routes');
-const { setupVite, serveStatic, log } = require('./vite');
+let setupVite, serveStatic, log;
+if (process.env.NODE_ENV === 'development') {
+  ({ setupVite, serveStatic, log } = require('./vite'));
+} else {
+  // Only require serveStatic and log for production, skip Vite
+  ({ serveStatic, log } = require('./vite'));
+}
 
 
 const app = express();
@@ -52,9 +59,9 @@ app.use((err, _req, res, _next) => {
 });
 
 // For local development, you can still use vite and static serving
-if (app.get('env') === 'development') {
+if (process.env.NODE_ENV === 'development' && setupVite) {
   setupVite(app);
-} else {
+} else if (serveStatic) {
   serveStatic(app);
 }
 
